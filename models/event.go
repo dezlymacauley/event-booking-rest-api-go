@@ -4,14 +4,28 @@ import "time"
 
 // The structure of data for each event
 type Event struct {
-     ID int
-     Name string
-     Description string
-     Location string
-     DateTime time.Time 
-     // An id that links the user who created the event 
-     // to the id ID of the event
-     UserID int
+  
+    // If the ID field is missing, 
+    // when an instance of this structure go will set a zero-value for 
+    // the data type. The zero-value of an int is 0
+    ID int
+
+    // You can use struct tags in Go to tell go that every instance created
+    // from this struct must have the following fields.
+    // Conviniently, the Gin package will also check these packages
+    // If the client makes a POST request that is missing on of these fields,
+    // there will be an error.
+    Name string `binding:"required"`
+    Description string `binding:"required"`
+    Location string `binding:"required"`
+    DateTime time.Time `binding:"required"`
+
+    // An id that links the user who created the event 
+    // to the id ID of the event
+    // If the UserID field is missing, 
+    // when an instance of this structure go will set a zero-value for 
+    // the data type. The zero-value of an int is 0
+    UserID int
 }
 
 // A slice of events
