@@ -9,6 +9,9 @@ package main
 import (
     "net/http"
     "github.com/gin-gonic/gin"
+
+    // This is how to use code from the package
+    "github.com/dezlymacauley/event-booking-rest-api-go/models"
 )
 
 func main() {
