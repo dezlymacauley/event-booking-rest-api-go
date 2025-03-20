@@ -8,7 +8,9 @@ package main
 
 import (
 	"net/http"
+
 	"github.com/gin-gonic/gin"
+
 	// This is how to use code from the package
 	"github.com/dezlymacauley/event-booking-rest-api-go/models"
 )
@@ -42,7 +44,7 @@ func main() {
 	// request.
 	server.GET("/events", getEvents)
 
-    server.POST("/events", createEvent)
+	server.POST("/events", createEvent)
 
 	// This starts the server on port 8080
 	// So that full address is http://localhost:8080
@@ -65,66 +67,69 @@ func main() {
 // and respond back to the client.
 func getEvents(context *gin.Context) {
 
-    events := models.GetAllEvents()
+	events := models.GetAllEvents()
 	// context.JSON is an easy way to send a formatted response back to the
 	// client.
-    // The http status code is set. http.StatusOK is an alias for 200
-    // This tells the client (browser, frontend app, or API consumer) 
-    // that everything went well.
-    // The events slice is marshalled (converted) to a JSON object
-    // Under the hood, Gin uses Go’s encoding/json package 
-    // to do this transformation automatically.
+	// The http status code is set. http.StatusOK is an alias for 200
+	// This tells the client (browser, frontend app, or API consumer)
+	// that everything went well.
+	// The events slice is marshalled (converted) to a JSON object
+	// Under the hood, Gin uses Go’s encoding/json package
+	// to do this transformation automatically.
 	context.JSON(http.StatusOK, events)
 }
 
 func createEvent(context *gin.Context) {
-    // The purpose of this function to process the data sent by the client
-    // and use it to create a new event.
-    // 1. The client data will be received as a JSON object
-    // 2. The client data need to be deserialized (Converted from JSON
-    // to a Go struct)
+	// The purpose of this function to process the data sent by the client
+	// and use it to create a new event.
+	// 1. The client data will be received as a JSON object
+	// 2. The client data need to be deserialized (Converted from JSON
+	// to a Go struct)
 
-    // Step 1: Create an empty instance of the Event struct to store
-    // the JSON data from the client, into Go code
-    var event models.Event
+	// Step 1: Create an empty instance of the Event struct to store
+	// the JSON data from the client, into Go code
+	var event models.Event
 
-    // This accepts a pointer to an instance of an empty struct
-    // The Gin framework will convert the JSON to a Go Struct
-    // and update the event struct
-    err := context.ShouldBindJSON(&event)
+	// This accepts a pointer to an instance of an empty struct
+	// The Gin framework will convert the JSON to a Go Struct
+	// and update the event struct
+	err := context.ShouldBindJSON(&event)
 
-    // In order for this to work the structure of the JSON object sent
-    // by the client must match the the format of the GO struct:
+	// In order for this to work the structure of the JSON object sent
+	// by the client must match the the format of the GO struct:
 
-    /*
-        Go struct format:
+	/*
+	   Go struct format:
 
-        type Event struct {
-             ID int
-             Name string
-             Description string
-             Location string
-             DateTime time.Time 
-             // An id that links the user who created the event 
-             // to the id ID of the event
-             UserID int
-        }
+	   type Event struct {
+	        ID int
+	        Name string
+	        Description string
+	        Location string
+	        DateTime time.Time
+	        // An id that links the user who created the event
+	        // to the id ID of the event
+	        UserID int
+	   }
 
-    */
+	*/
 
-    // Error handling
-    if err != nil {
-        context.JSON(
-            http.StatusBadRequest, 
-            gin.H{"message": "Could not parse request data"},
-        )
-        return
-    }
+	// Error handling
+	if err != nil {
+		context.JSON(
+			http.StatusBadRequest,
+			gin.H{"message": "Could not parse request data"},
+		)
+		return
+	}
 
-    // dummy values for now
-    event.ID = 1
-    event.UserID = 1
+	// dummy values for now
+	event.ID = 1
+	event.UserID = 1
 
-    context.JSON(http.StatusCreated, gin.H{"message": "Event created!", "event": event})
+	// Save the request
+	event.Save()
+
+	context.JSON(http.StatusCreated, gin.H{"message": "Event created!", "event": event})
 
 }
