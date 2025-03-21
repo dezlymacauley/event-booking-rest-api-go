@@ -10,6 +10,7 @@ https://pkg.go.dev/
 Then add it like this:
 ```sh
 go get github.com/gin-gonic/gin
+go get github.com/mattn/go-sqlite3
 ```
 
 After installing a package, 

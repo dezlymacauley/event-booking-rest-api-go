@@ -11,11 +11,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	// This is how to use code from the package
+	// This is how to use code from packages you created
+	"github.com/dezlymacauley/event-booking-rest-api-go/db"
 	"github.com/dezlymacauley/event-booking-rest-api-go/models"
 )
 
 func main() {
+
+	// This will ensure that the database is set up before the server starts
+	db.InitDB()
 
 	// `gin.Default()` creates an Engine object,
 	// which is essentially new web server that is created
